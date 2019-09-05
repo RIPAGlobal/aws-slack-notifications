@@ -1,6 +1,12 @@
 # Serverless directories
 .serverless
 
+# Editor
+.idea/
+
+# Local env vars
+.env
+
 # golang output binary directory
 bin
 
