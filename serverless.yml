@@ -1,4 +1,4 @@
-service: codepipeline-notifications
+service: slack-notifications
 #app: your-app-name
 #tenant: your-tenant-name
 
@@ -65,4 +65,4 @@ resources:
           - AttributeName: buildID
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
-        TableName: 'codebuild-slack-mids-${opt:stage, self:provider.stage}'
+        TableName: 'slack-message-ids-${opt:stage, self:provider.stage}'
