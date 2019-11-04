@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/nlopes/slack"
 	"os"
+	"time"
 )
 
 // Initialise Slack API with the Bot Token
@@ -12,11 +13,17 @@ import (
 var api = slack.New(os.Getenv("OAUTH_ACCESS_TOKEN"))
 
 func CreateOrUpdateMessage(channelID string, buildID string, blocks []slack.Block, attachment slack.Attachment){
-	slackTS := SlackTSLookup(buildID)
+	slackTS := ""
+	slackTS = SlackTSLookup(buildID)
+
+	// Race condition means the write could happen before the read if we don't find a message
+	// set a delay based on reported Put Latency of DynamoDB and look again.
+	if slackTS == "" {
+		time.Sleep(20 * time.Millisecond)
+		slackTS = SlackTSLookup(buildID)
+	}
 
 	if slackTS == "" {
-		// TODO: Race condition with DynamoDB - runs to fast?
-
 		_, respTimestamp, err := api.PostMessage(channelID, slack.MsgOptionBlocks(blocks...), slack.MsgOptionAttachments(attachment))
 		HandleSlackErrors(err, blocks)
 		SaveNewMessageTS(buildID,respTimestamp)
