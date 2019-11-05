@@ -25,6 +25,9 @@ func CodePipelineNotifier(event events.CodePipelineEvent) {
 	}
 	fmt.Printf("\n%s", prettyJson)
 
+	// The default should never get hit with the settings in the serverless.yml for CloudWatch detail types to listen to
+	// Useful for debugging and showing whats supported.
+	//
 	switch event.DetailType {
 	case events.CodePipelineExecutionEventDetailType, events.CodePipelineActionEventDetailType, events.CodePipelineStageEventDetailType:
 		executionID := event.Detail.ExecutionId

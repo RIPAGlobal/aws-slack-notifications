@@ -22,7 +22,12 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:*:*:*" # Need to limit the use of this to the Table.
+      Resource: "arn:aws:dynamodb:*:*:*" # TODO: Need to limit the use of this to the Table.
+    - Effect: Allow
+      Action:
+        - codepipeline:GetPipelineExecution
+      Resource: "arn:aws:codepipeline:*:*:*" # TODO: Do we need to limit this?
+
   environment:
     DYNAMO_TABLE_NAME: codebuild-slack-mids-${opt:stage, self:provider.stage}
 
@@ -42,6 +47,9 @@ functions:
           event:
             source:
               - "aws.codebuild"
+            detail-type:
+              - "CodeBuild Build State Change"
+              - "CodeBuild Build Phase Change"
   codepipeline-notifier:
     handler: bin/codepipeline-notifier
     events:
@@ -51,6 +59,10 @@ functions:
           event:
             source:
               - "aws.codepipeline"
+            detail-type:
+              - "CodePipeline Pipeline Execution State Change"
+              - "CodePipeline Action Execution State Change"
+              - "CodePipeline Stage Execution State Change"
 
 resources:
   Resources:
