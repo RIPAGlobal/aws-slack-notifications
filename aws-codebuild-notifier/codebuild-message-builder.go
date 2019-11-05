@@ -15,7 +15,10 @@ func BuildAndSendSlackMessage(event events.CodeBuildEvent, buildID string) {
 	fmt.Println("## BuildSlackMessage:")
 	var blocks []slack.Block // Full Set of blocks that make up the slack message.
 
-	// TODO: Top Message
+	// If this event has come from Codepipeline assume we do not need to add the Source Details
+	if event.Detail.AdditionalInformation.Source.Type != "CODEPIPELINE"{
+		// TODO: Top Message
+	}
 
 	var phaseTextBlocks []*slack.TextBlockObject
 	PhaseTextBlockBuilder(&phaseTextBlocks, event.Detail.AdditionalInformation.Phases)
@@ -33,12 +36,12 @@ func BuildAndSendSlackMessage(event events.CodeBuildEvent, buildID string) {
 	}
 
 	// This is the old way of using Buttons - but seems to still be the official advice to use this for "Button Links"
-	// otherwise you essentially have to build a listner to process the requests / just use text links
+	// otherwise you essentially have to build a listener to process the requests / just use text links
 	// TODO: Revisit this in the future.
 	action := slack.AttachmentAction{
 		Name:            "Build Logs",
 		Text:            "Build Logs",
-		Style:           "", // Should change based on Status
+		Style:           "", // TODO: Should change based on Status
 		Type:            "button",
 		URL:             event.Detail.AdditionalInformation.Logs.DeepLink,
 	}
