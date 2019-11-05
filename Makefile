@@ -8,4 +8,4 @@ clean:
 	rm -rf ./bin
 
 deploy: clean build
-	sls deploy --force --verbose
+	sls deploy --verbose
