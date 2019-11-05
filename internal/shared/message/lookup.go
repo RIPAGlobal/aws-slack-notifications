@@ -15,8 +15,7 @@ type SlackMessageIdentifier struct {
 }
 
 func SlackTSLookup(buildID string) string {
-	fmt.Printf("\n%s", "Looking up:")
-	fmt.Printf("\n%s", buildID)
+	fmt.Printf("\n%s %s", "Looking up:", buildID)
 
 	// Create the session that the DynamoDB service will use.
 	awsSession := session.Must(session.NewSession())
