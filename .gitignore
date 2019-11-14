@@ -1,5 +1,5 @@
 # Serverless directories
-.serverless
+services/deployment-notifications/.serverless
 
 # Editor
 .idea/
@@ -7,8 +7,8 @@
 # Local env vars
 .env
 
-# golang output binary directory
-bin
+# golang output binary directories
+services/deployment-notifications/bin
 
 # Binaries for programs and plugins
 *.exe
@@ -22,3 +22,6 @@ bin
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Mac
+.DS_Store

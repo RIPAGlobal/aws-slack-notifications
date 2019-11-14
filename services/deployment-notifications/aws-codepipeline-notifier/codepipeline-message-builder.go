@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/whithajess/aws-codepipeline-slack-notifications/internal/shared/message"
+	"github.com/RIPGlobal/aws-slack-notifications/internal/shared/message"
 	"os"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -86,13 +86,13 @@ func RevisionTextBlockBuilder(revisionTextBlocks *[]*slack.TextBlockObject, buil
 
 func DetailTextBlockBuilder(detailTextBlocks *[]*slack.TextBlockObject, detail events.CodePipelineEventDetail ) {
 	statusIconMapping := map[string]string{
-		"": 									   message.BuildPhasesUnknown,
-		string(events.CodePipelineStateStarted):   message.BuildPhasesInProgress,
-		events.CodePipelineStateSucceeded:         message.BuildPhasesSucceeded,
-		events.CodePipelineStateResumed:           message.BuildPhasesInProgress,
-		events.CodePipelineStateFailed:            message.BuildPhasesFailed,
-		events.CodePipelineStateCanceled:          message.BuildPhasesStopped,
-		events.CodePipelineStateSuperseded:        message.BuildPhasesStopped,
+		"":                                      message.BuildPhasesUnknown,
+		string(events.CodePipelineStateStarted): message.BuildPhasesInProgress,
+		events.CodePipelineStateSucceeded:       message.BuildPhasesSucceeded,
+		events.CodePipelineStateResumed:         message.BuildPhasesInProgress,
+		events.CodePipelineStateFailed:          message.BuildPhasesFailed,
+		events.CodePipelineStateCanceled:        message.BuildPhasesStopped,
+		events.CodePipelineStateSuperseded:      message.BuildPhasesStopped,
 	}
 
 	detailTextBlock := slack.NewTextBlockObject(

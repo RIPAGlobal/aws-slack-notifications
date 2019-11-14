@@ -9,7 +9,7 @@ import (
 )
 
 func TestCodeBuildNotifier(t *testing.T) {
-	data, err := ioutil.ReadFile("../internal/test-data/codebuild-phase-change-notification.json")
+	data, err := ioutil.ReadFile("../../../internal/test-data/codebuild-phase-change-notification.json")
 	require.NoError(t, err)
 
 	codeBuildEvent := events.CodeBuildEvent{}

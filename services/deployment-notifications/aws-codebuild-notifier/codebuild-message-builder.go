@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/whithajess/aws-codepipeline-slack-notifications/internal/shared/message"
+	"github.com/RIPGlobal/aws-slack-notifications/internal/shared/message"
+	"log"
 	"os"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -13,12 +14,14 @@ import (
 
 func BuildAndSendSlackMessage(event events.CodeBuildEvent, buildID string) {
 	fmt.Println("## BuildSlackMessage:")
-	var blocks []slack.Block // Full Set of blocks that make up the slack message.
-
 	// If this event has come from Codepipeline assume we do not need to add the Source Details
 	if event.Detail.AdditionalInformation.Source.Type != "CODEPIPELINE"{
-		// TODO: Top Message
+		log.Fatalln("Currently only taking CodePipeline messages")
 	}
+
+	var blocks []slack.Block // Full Set of blocks that make up the slack message.
+
+
 
 	var phaseTextBlocks []*slack.TextBlockObject
 	PhaseTextBlockBuilder(&phaseTextBlocks, event.Detail.AdditionalInformation.Phases)
@@ -58,7 +61,7 @@ func BuildAndSendSlackMessage(event events.CodeBuildEvent, buildID string) {
 
 func PhaseTextBlockBuilder(phaseTextBlocks *[]*slack.TextBlockObject, phases []events.CodeBuildPhase) {
 	statusIconMapping := map[string]string{
-		"": 									   message.BuildPhasesUnknown,
+		"": message.BuildPhasesUnknown,
 		string(events.CodeBuildPhaseStatusFailed): message.BuildPhasesFailed,
 		events.CodeBuildPhaseStatusFault:          message.BuildPhasesFault,
 		events.CodeBuildPhaseStatusQueued:         message.BuildPhasesQueued,
