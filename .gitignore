@@ -1,5 +1,5 @@
 # Serverless directories
-services/deployment-notifications/.serverless
+services/codepipeline-deployment-notifications/.serverless
 
 # Editor
 .idea/
@@ -8,7 +8,7 @@ services/deployment-notifications/.serverless
 .env
 
 # golang output binary directories
-services/deployment-notifications/bin
+services/*/bin
 
 # Binaries for programs and plugins
 *.exe
