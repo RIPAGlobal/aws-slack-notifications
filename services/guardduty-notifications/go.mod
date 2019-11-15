@@ -3,6 +3,6 @@ module github.com/RIPGlobal/aws-slack-notifications/services/guardduty-notificat
 go 1.13
 
 require (
-	github.com/aws/aws-lambda-go v1.13.3 // indirect
-	github.com/nlopes/slack v0.6.0 // indirect
+	github.com/RIPGlobal/aws-slack-notifications v0.0.0-20191115030555-fbf59f54c19d
+	github.com/aws/aws-lambda-go v1.13.3
 )

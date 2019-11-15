@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"github.com/RIPGlobal/aws-slack-notifications/internal/shared/message"
 	"os"
 
 	"github.com/nlopes/slack"
@@ -25,11 +25,19 @@ var api = slack.New(os.Getenv("OAUTH_ACCESS_TOKEN"))
 
 // Reporter - Listens for CloudWatch events of GuardDuty Findings
 // Then formats these and sends them to Slack
-func Reporter(event events.CloudWatchEvent) (events.CloudWatchEvent, error) {
+func Reporter(event events.CloudWatchEvent) {
+	// TODO: Worth moving this into aws-lambda-go events
 	var finding GuardDutyFinding
 	json.Unmarshal([]byte(event.Detail), &finding)
 
-	params := slack.PostMessageParameters{}
+	blocks := []slack.Block{
+		slack.NewSectionBlock(
+			slack.NewTextBlockObject("mrkdwn", "*Build Status:*", false, false),
+			nil,
+			nil,
+			slack.SectionBlockOptionBlockID("second_phase_block")),
+	}
+
 	attachment := slack.Attachment{
 		Title: finding.Title,
 		Text:  finding.Description,
@@ -49,19 +57,10 @@ func Reporter(event events.CloudWatchEvent) (events.CloudWatchEvent, error) {
 			},
 		},
 	}
-	params.Attachments = []slack.Attachment{attachment}
-	channelID, timestamp, err := api.PostMessage(os.Getenv("CHANNEL"), "", params)
 
-	// Logging for errors / success
-	if err != nil {
-		fmt.Printf("%s\n", err)
-		fmt.Printf(err.Error())
-	} else {
-		fmt.Printf("Message successfully sent to channel %s at %s", channelID, timestamp)
-	}
+	channelID := os.Getenv("GuardDutySlackChannelID")
 
-	// TODO: Not sure what we are meant to send back to CloudWatch - seems to work
-	return event, err
+	message.CreateMessage(channelID, blocks, attachment)
 }
 
 func main() {
