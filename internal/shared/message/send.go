@@ -17,16 +17,21 @@ func CreateOrUpdateMessage(channelID string, buildID string, blocks []slack.Bloc
 
 	if slackTS == "" {
 		fmt.Printf("\n%s %s", "Not Found on first attempt:", buildID)
-		_, respTimestamp, err := api.PostMessage(channelID, slack.MsgOptionBlocks(blocks...), slack.MsgOptionAttachments(attachment))
-		HandleSlackErrors(err, blocks)
+		respTimestamp := CreateMessage(channelID, blocks, attachment)
 		SaveNewMessageTS(buildID, respTimestamp)
-		fmt.Println("## Saved new Message:")
-		fmt.Println(buildID, respTimestamp)
 	} else {
 		fmt.Printf("\n%s %s", "Found:", buildID)
 		_, _, _, err := api.UpdateMessage(channelID, slackTS, slack.MsgOptionBlocks(blocks...), slack.MsgOptionAttachments(attachment))
 		HandleSlackErrors(err, blocks)
 	}
+}
+
+func CreateMessage(channelID string, blocks []slack.Block, attachment slack.Attachment) string {
+	_, respTimestamp, err := api.PostMessage(channelID, slack.MsgOptionBlocks(blocks...), slack.MsgOptionAttachments(attachment))
+	HandleSlackErrors(err, blocks)
+	fmt.Println("## Saved new Message:")
+	fmt.Println(respTimestamp)
+	return respTimestamp
 }
 
 // Generic Error printer if exists - not much else we can do with them.
