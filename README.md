@@ -4,11 +4,19 @@
 
 # AWS Slack Notifications
 
-## CodeBuild Notifier
+A generic set up for sending AWS notifications to Slack.
 
-## CodePipeline Notifier
+Uses:
+* Golang
+* Serverless
+
+## Services
+
+Notifications are set up as individual Serverless services, making them deployable individually. While sharing common code.
+
+### CodePipeline Deployment Notifications
+
+### GuardDuty Notifications
 
 ## Slack Setup
-
-## Testing
 

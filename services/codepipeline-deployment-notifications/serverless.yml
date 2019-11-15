@@ -1,4 +1,4 @@
-service: slack-notifications
+service: codepipeline-deployment-notifications
 #app: your-app-name
 #tenant: your-tenant-name
 
