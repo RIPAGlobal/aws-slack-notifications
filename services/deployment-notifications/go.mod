@@ -3,8 +3,9 @@ module github.com/RIPGlobal/aws-slack-notifications/services/deployment-notifica
 go 1.13
 
 require (
-	github.com/RIPGlobal/aws-slack-notifications v0.0.0-20191115010528-10860fb66e17
+	github.com/RIPGlobal/aws-slack-notifications v0.0.0-20191115011656-27fe591efa78
 	github.com/aws/aws-lambda-go v1.13.3
+	github.com/aws/aws-sdk-go v1.25.35
 	github.com/nlopes/slack v0.6.0
 	github.com/stretchr/testify v1.4.0
 )

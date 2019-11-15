@@ -36,6 +36,7 @@ func CodePipelineNotifier(event events.CodePipelineEvent) {
 		fmt.Printf("\n# Non-Matched Event - Do nothing")
 	}
 }
+
 // Generic Error printer if exists - not much else we can do with them.
 func HandleErrors(err error, event events.CodePipelineEvent) {
 	if err != nil {

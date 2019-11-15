@@ -11,7 +11,7 @@ import (
 //
 var api = slack.New(os.Getenv("OAUTH_ACCESS_TOKEN"))
 
-func CreateOrUpdateMessage(channelID string, buildID string, blocks []slack.Block, attachment slack.Attachment){
+func CreateOrUpdateMessage(channelID string, buildID string, blocks []slack.Block, attachment slack.Attachment) {
 	slackTS := ""
 	slackTS = SlackTSLookup(buildID)
 
@@ -19,7 +19,7 @@ func CreateOrUpdateMessage(channelID string, buildID string, blocks []slack.Bloc
 		fmt.Printf("\n%s %s", "Not Found on first attempt:", buildID)
 		_, respTimestamp, err := api.PostMessage(channelID, slack.MsgOptionBlocks(blocks...), slack.MsgOptionAttachments(attachment))
 		HandleSlackErrors(err, blocks)
-		SaveNewMessageTS(buildID,respTimestamp)
+		SaveNewMessageTS(buildID, respTimestamp)
 		fmt.Println("## Saved new Message:")
 		fmt.Println(buildID, respTimestamp)
 	} else {

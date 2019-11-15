@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/RIPGlobal/aws-slack-notifications/internal/shared/message"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/RIPGlobal/aws-slack-notifications/internal/shared/message"
 	"os"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -46,7 +46,7 @@ func BuildAndSendSlackMessage(detail events.CodePipelineEventDetail, buildID str
 	// TODO: Log links etc.
 }
 
-func RevisionTextBlockBuilder(revisionTextBlocks *[]*slack.TextBlockObject, buildID string, pipelineName string) *slack.TextBlockObject{
+func RevisionTextBlockBuilder(revisionTextBlocks *[]*slack.TextBlockObject, buildID string, pipelineName string) *slack.TextBlockObject {
 	fmt.Println("Message Lookup")
 	// Create the session that the CodePipeline service will use.
 	awsSession := session.Must(session.NewSession())
@@ -67,7 +67,7 @@ func RevisionTextBlockBuilder(revisionTextBlocks *[]*slack.TextBlockObject, buil
 		fmt.Println(err)
 	}
 
-	revisionSummaryTextBlock := slack.NewTextBlockObject("mrkdwn", "",false, false)
+	revisionSummaryTextBlock := slack.NewTextBlockObject("mrkdwn", "", false, false)
 	revisionURL := ""
 
 	// TODO: Clean this up
@@ -78,13 +78,13 @@ func RevisionTextBlockBuilder(revisionTextBlocks *[]*slack.TextBlockObject, buil
 	}
 
 	// TODO: Clean this up
-	revisionTextBlock2 := slack.NewTextBlockObject("mrkdwn", revisionURL,false, false)
+	revisionTextBlock2 := slack.NewTextBlockObject("mrkdwn", revisionURL, false, false)
 	*revisionTextBlocks = append(*revisionTextBlocks, revisionTextBlock2)
 
 	return revisionSummaryTextBlock
 }
 
-func DetailTextBlockBuilder(detailTextBlocks *[]*slack.TextBlockObject, detail events.CodePipelineEventDetail ) {
+func DetailTextBlockBuilder(detailTextBlocks *[]*slack.TextBlockObject, detail events.CodePipelineEventDetail) {
 	statusIconMapping := map[string]string{
 		"":                                      message.BuildPhasesUnknown,
 		string(events.CodePipelineStateStarted): message.BuildPhasesInProgress,
@@ -96,10 +96,10 @@ func DetailTextBlockBuilder(detailTextBlocks *[]*slack.TextBlockObject, detail e
 	}
 
 	detailTextBlock := slack.NewTextBlockObject(
-			"plain_text",
-		    fmt.Sprintf("%s %s", string(statusIconMapping[string(detail.State)]), string(detail.Stage)),
-			true,
-			false,
+		"plain_text",
+		fmt.Sprintf("%s %s", string(statusIconMapping[string(detail.State)]), string(detail.Stage)),
+		true,
+		false,
 	)
 	*detailTextBlocks = append(*detailTextBlocks, detailTextBlock)
 }

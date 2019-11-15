@@ -15,13 +15,11 @@ import (
 func BuildAndSendSlackMessage(event events.CodeBuildEvent, buildID string) {
 	fmt.Println("## BuildSlackMessage:")
 	// If this event has come from Codepipeline assume we do not need to add the Source Details
-	if event.Detail.AdditionalInformation.Source.Type != "CODEPIPELINE"{
+	if event.Detail.AdditionalInformation.Source.Type != "CODEPIPELINE" {
 		log.Fatalln("Currently only taking CodePipeline messages")
 	}
 
 	var blocks []slack.Block // Full Set of blocks that make up the slack message.
-
-
 
 	var phaseTextBlocks []*slack.TextBlockObject
 	PhaseTextBlockBuilder(&phaseTextBlocks, event.Detail.AdditionalInformation.Phases)
@@ -42,11 +40,11 @@ func BuildAndSendSlackMessage(event events.CodeBuildEvent, buildID string) {
 	// otherwise you essentially have to build a listener to process the requests / just use text links
 	// TODO: Revisit this in the future.
 	action := slack.AttachmentAction{
-		Name:            "Build Logs",
-		Text:            "Build Logs",
-		Style:           "", // TODO: Should change based on Status
-		Type:            "button",
-		URL:             event.Detail.AdditionalInformation.Logs.DeepLink,
+		Name:  "Build Logs",
+		Text:  "Build Logs",
+		Style: "", // TODO: Should change based on Status
+		Type:  "button",
+		URL:   event.Detail.AdditionalInformation.Logs.DeepLink,
 	}
 
 	// Package up the button as an Attachment
@@ -81,7 +79,7 @@ func PhaseTextBlockBuilder(phaseTextBlocks *[]*slack.TextBlockObject, phases []e
 				false,
 			)
 			*phaseTextBlocks = append(*phaseTextBlocks, phaseTextBlock)
-		} else{
+		} else {
 			phaseTextBlock := slack.NewTextBlockObject(
 				"plain_text",
 				fmt.Sprintf("%s %s", string(statusIconMapping[string(phase.PhaseStatus)]), string(phase.PhaseType)),

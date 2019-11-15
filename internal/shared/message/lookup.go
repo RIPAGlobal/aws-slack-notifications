@@ -45,7 +45,7 @@ func SlackTSLookup(buildID string) string {
 	return mid.TS
 }
 
-func SaveNewMessageTS(buildID string, slackTS string){
+func SaveNewMessageTS(buildID string, slackTS string) {
 	// Create the session that the DynamoDB service will use.
 	awsSession := session.Must(session.NewSession())
 
@@ -58,7 +58,7 @@ func SaveNewMessageTS(buildID string, slackTS string){
 	}
 
 	newSlackMessageID, err := dynamodbattribute.MarshalMap(mid)
-	HandleTSErrors(err,buildID)
+	HandleTSErrors(err, buildID)
 
 	input := &dynamodb.PutItemInput{
 		Item:      newSlackMessageID,
@@ -66,7 +66,7 @@ func SaveNewMessageTS(buildID string, slackTS string){
 	}
 
 	_, err = svc.PutItem(input)
-	HandleTSErrors(err,buildID)
+	HandleTSErrors(err, buildID)
 }
 
 // Lookup Error printer if exists - not much else we can do with them.
