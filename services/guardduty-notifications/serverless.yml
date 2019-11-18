@@ -6,8 +6,8 @@ provider:
   region: ap-southeast-2
 
 environment:
-  OAUTH_ACCESS_TOKEN: ${ssm:guardBotOAuthAccessToken}
-  CHANNEL: ${ssm:guardChannel}
+  AWS_SLACK_NOTIFICATIONS_OAUTH_ACCESS_TOKEN: ${env:AWS_SLACK_NOTIFICATIONS_OAUTH_ACCESS_TOKEN}
+  GUARD_DUTY_NOTIFICATIONS_SLACK_CHANNEL: ${env:GUARD_DUTY_NOTIFICATIONS_SLACK_CHANNEL}
 
 package:
  exclude:
@@ -16,8 +16,8 @@ package:
    - ./bin/**
 
 functions:
-  finding-reporter:
-    handler: bin/finding-reporter
+  guardduty-notifier:
+    handler: bin/guardduty-notifier
     events:
       - cloudwatchEvent:
           name: "guard-duty-findings"

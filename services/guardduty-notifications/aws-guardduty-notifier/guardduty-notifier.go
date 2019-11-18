@@ -20,19 +20,16 @@ type GuardDutyFinding struct {
 	AccountId   string      `json:"accountId"`
 }
 
-// Initialise Slack API with the Bot Token
-var api = slack.New(os.Getenv("OAUTH_ACCESS_TOKEN"))
-
 // Reporter - Listens for CloudWatch events of GuardDuty Findings
 // Then formats these and sends them to Slack
-func Reporter(event events.CloudWatchEvent) {
+func GuardDutyNotifier(event events.CloudWatchEvent) {
 	// TODO: Worth moving this into aws-lambda-go events
 	var finding GuardDutyFinding
 	json.Unmarshal([]byte(event.Detail), &finding)
 
 	blocks := []slack.Block{
 		slack.NewSectionBlock(
-			slack.NewTextBlockObject("mrkdwn", "*Build Status:*", false, false),
+			slack.NewTextBlockObject("mrkdwn", "*GuardDuty Finding:*", false, false),
 			nil,
 			nil,
 			slack.SectionBlockOptionBlockID("second_phase_block")),
@@ -58,11 +55,11 @@ func Reporter(event events.CloudWatchEvent) {
 		},
 	}
 
-	channelID := os.Getenv("GuardDutySlackChannelID")
+	channelID := os.Getenv("GUARD_DUTY_NOTIFICATIONS_SLACK_CHANNEL")
 
 	message.CreateMessage(channelID, blocks, attachment)
 }
 
 func main() {
-	lambda.Start(Reporter)
+	lambda.Start(GuardDutyNotifier)
 }

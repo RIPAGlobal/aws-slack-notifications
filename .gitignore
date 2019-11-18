@@ -25,3 +25,5 @@ services/*/bin
 
 # Mac
 .DS_Store
+
+.serverless

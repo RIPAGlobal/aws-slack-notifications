@@ -1,32 +1,34 @@
 [![Serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
-[![Go Report Card](https://goreportcard.com/badge/github.com/whithajess/guardduty-slack-reporter)](https://goreportcard.com/report/github.com/whithajess/guardduty-slack-reporter)
-[![License](https://img.shields.io/github/license/whithajess/guardduty-slack-reporter.svg)](LICENSE.md)
 
 # GuardDuty Slack Reporter
 
-A serverless application for reporting findings from GuardDuty via Cloudwatch events to Slack.
+A serverless service for reporting findings from GuardDuty via CloudWatch events to a Slack Channel.
 
-### Setup
+***Suggested that this is installed into a Security/Audit Account - where you house your GuardDuty (master)***
 
-***1.*** Login to https://api.slack.com/apps and Create New App
-   * The App name you use will be the user reporting the guard duty findings
-   * The App will need to be installed for you to get an OAuth token.
+See Resources for why and how:
+* [Your single AWS account is a serious risk](https://cloudonaut.io/your-single-aws-account-is-a-serious-risk/)
+* [You need more than one AWS account: AWS bastions and assume-role](https://blog.coinbase.com/you-need-more-than-one-aws-account-aws-bastions-and-assume-role-23946c6dfde3)
+* [AWS security configurations and best practices - GuardDuty](https://asecure.cloud/l/s_guardduty/)
+
+Otherwise if you have a single account or multiple accounts without a master deploy individually in each.
+
+## Deployment
 
 
-***2.*** After creating the application in Slack we need to set tokens for the App to use:
-   * These are region specific if you haven't set `AWS_PROFILE` you may want to use the flag `--region`
-```bash
-  # The verification token
-  # can be found under Basic Information in the App on https://api.slack.com/apps
-  # This gives us the ability to check the messages sent to the App are actually coming from Slack
-  aws ssm put-parameter --name guardBotOAuthAccessToken --type String --value SecretToken
 
-  # The channel we want to post into
-  aws ssm put-parameter --name guardChannel --type String --value ChannelID
+### Environment Variables
+
+```zsh
+# Global:
+export AWS_SLACK_NOTIFICATIONS_OAUTH_ACCESS_TOKEN=xoxp-825209819346-837534187124-837535618052-6597eb2eaceccd85340e0fe5033b43db
+
+# Service Specific:
+export GUARD_DUTY_NOTIFICATIONS_SLACK_CHANNEL=CQN0636KX
 ```
 
-***3.*** After this is all set you will need to deploy the application
-```bash
-  make
-  sls deploy
+### Required OAuth Scopes (Slack)
+
+```zsh
+chat:write:bot # Send messages as Application
 ```
