@@ -52,7 +52,7 @@ func BuildAndSendSlackMessage(event events.CodeBuildEvent, buildID string) {
 		Actions: []slack.AttachmentAction{action},
 	}
 
-	channelID := os.Getenv("CodeBuildSlackChannelID")
+	channelID := os.Getenv("CODEPIPELINE_DEPLOYMENT_NOTIFICATIONS_SLACK_CHANNEL")
 
 	message.CreateOrUpdateMessage(channelID, buildID, blocks, attachment)
 }

@@ -39,7 +39,7 @@ func BuildAndSendSlackMessage(detail events.CodePipelineEventDetail, buildID str
 
 	blocks = append(blocks, slack.NewSectionBlock(nil, detailTextBlocks, nil, slack.SectionBlockOptionBlockID("status_details")))
 
-	channelID := os.Getenv("CodePipelineSlackChannelID")
+	channelID := os.Getenv("CODEPIPELINE_DEPLOYMENT_NOTIFICATIONS_SLACK_CHANNEL")
 
 	message.CreateOrUpdateMessage(channelID, buildID, blocks, slack.Attachment{})
 
