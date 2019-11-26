@@ -1,6 +1,6 @@
 [![Serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
 
-# GuardDuty Slack Reporter
+# GuardDuty Notifications
 
 A serverless service for reporting findings from GuardDuty via CloudWatch events to a Slack Channel.
 
@@ -15,9 +15,12 @@ Otherwise if you have a single account or multiple accounts without a master dep
 
 ## Deployment
 
+```zsh
+# Change region as appropriate.
+sls deploy --region ap-southeast-2
+```
 
-
-### Environment Variables
+### Required Environment Variables
 
 ```zsh
 # Global:

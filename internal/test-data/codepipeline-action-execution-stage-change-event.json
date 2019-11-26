@@ -12,7 +12,7 @@
   "detail": {
     "pipeline": "myPipeline",
     "version": 1,
-    "execution-id": "test-1",
+    "execution-id": "01234567-0123-0123-0123-012345678901",
     "stage": "Prod",
     "action": "myAction",
     "state": "SUCCEEDED",

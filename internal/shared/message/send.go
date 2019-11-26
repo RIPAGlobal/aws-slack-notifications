@@ -27,10 +27,6 @@ func CreateOrUpdateMessage(channelID string, buildID string, blocks []slack.Bloc
 }
 
 func CreateMessage(channelID string, blocks []slack.Block, attachment slack.Attachment) string {
-	token := os.Getenv("AWS_SLACK_NOTIFICATIONS_OAUTH_ACCESS_TOKEN")
-	fmt.Println("token:")
-	fmt.Println(token)
-
 	_, respTimestamp, err := api.PostMessage(channelID, slack.MsgOptionBlocks(blocks...), slack.MsgOptionAttachments(attachment))
 	HandleSlackErrors(err, blocks)
 	fmt.Println("## Saved new Message:")

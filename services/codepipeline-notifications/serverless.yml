@@ -1,4 +1,4 @@
-service: codepipeline-deployment-notifications
+service: codepipeline-notifications
 #app: your-app-name
 #tenant: your-tenant-name
 
@@ -29,7 +29,7 @@ provider:
       Resource: "arn:aws:codepipeline:*:*:*" # TODO: Do we need to limit this?
 
   environment:
-    DYNAMO_TABLE_NAME: codebuild-slack-mids-${opt:stage, self:provider.stage}
+    DYNAMO_TABLE_NAME: slack-message-ids-${opt:stage, self:provider.stage}
     AWS_SLACK_NOTIFICATIONS_OAUTH_ACCESS_TOKEN: ${env:AWS_SLACK_NOTIFICATIONS_OAUTH_ACCESS_TOKEN}
     CODEPIPELINE_DEPLOYMENT_NOTIFICATIONS_SLACK_CHANNEL: ${env:CODEPIPELINE_DEPLOYMENT_NOTIFICATIONS_SLACK_CHANNEL}
 
