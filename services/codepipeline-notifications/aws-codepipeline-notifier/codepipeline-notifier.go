@@ -13,42 +13,41 @@ type SlackMessageIdentifier struct {
 }
 
 // CodePipelineNotifier is the lambda handler invoked by the `lambda.Start` function call
-func CodePipelineNotifier(event events.CodePipelineEvent) {
-	fmt.Println("### CodePipelineEvent")
-	fmt.Printf("\n### EventID: %s", event.ID)
-	fmt.Printf("\n### Execution: %s", event.Detail.ExecutionId)
-	fmt.Println("EventFull:")
-	prettyJson, err := json.MarshalIndent(event, "", "    ")
+func CodePipelineNotifier(event events.SQSEvent) {
+
+	fmt.Println("EventRecord:")
+	prettyJson, err := json.MarshalIndent(event.Records[0], "", "    ")
 	if err != nil {
-		fmt.Println("## JSON Indent Error:")
+		fmt.Println("### JSON Indent Error:")
 		fmt.Println(err.Error())
 	}
 	fmt.Printf("\n%s", prettyJson)
 
+	var pipelineEvent events.CodePipelineEvent
+
+	// Take the escaped Json String of the Event from the SQS Event so we can use it
+	rawEscapedJsonString := []byte(event.Records[0].Body)
+	rawJsonBody := (*json.RawMessage)(&rawEscapedJsonString)
+
+	err = json.Unmarshal(*rawJsonBody, &pipelineEvent)
+	if err != nil {
+		fmt.Println("### JSON Unmarshal Error:")
+		fmt.Println(err.Error())
+	}
+
+	fmt.Println("## CodePipelineEvent")
+	fmt.Printf("\n## EventID: %s", pipelineEvent.ID)
+	fmt.Printf("\n## Execution: %s", pipelineEvent.Detail.ExecutionId)
+
 	// The default should never get hit with the settings in the serverless.yml for CloudWatch detail types to listen to
 	// Useful for debugging and showing whats supported.
 	//
-	switch event.DetailType {
+	switch pipelineEvent.DetailType {
 	case events.CodePipelineExecutionEventDetailType, events.CodePipelineActionEventDetailType, events.CodePipelineStageEventDetailType:
-		executionID := event.Detail.ExecutionId
-		BuildAndSendSlackMessage(event.Detail, executionID)
+		executionID := pipelineEvent.Detail.ExecutionId
+		BuildAndSendSlackMessage(pipelineEvent.Detail, executionID)
 	default:
 		fmt.Printf("\n# Non-Matched Event - Do nothing")
-	}
-}
-
-// Generic Error printer if exists - not much else we can do with them.
-func HandleErrors(err error, event events.CodePipelineEvent) {
-	if err != nil {
-		fmt.Println("# Error:")
-		fmt.Println(err.Error())
-		fmt.Println("# Request:")
-		prettyJson, err := json.MarshalIndent(event, "", "    ")
-		if err != nil {
-			fmt.Println("# JSON Indent Error:")
-			fmt.Println(err.Error())
-		}
-		fmt.Printf("\n%s", prettyJson)
 	}
 }
 

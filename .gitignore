@@ -5,6 +5,7 @@ services/codepipeline-deployment-notifications/.serverless
 .idea/
 
 # Local env vars
+.production-env
 .env
 
 # golang output binary directories
