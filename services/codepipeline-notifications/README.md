@@ -10,7 +10,8 @@ Will report account wide so deploy in any accounts you want to report on.
 
 * DynamoDB (Inside AWS)
   - Used to store the Slack Message Identifier against the Build Identifier so it can continuously update a single message. 
-
+* SQS FIFO Queue (Inside AWS)
+  - Used to stack messages in order
 
 ## Deployment
 
