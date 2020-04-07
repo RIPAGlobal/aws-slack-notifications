@@ -16,8 +16,7 @@ Will report account wide so deploy in any accounts you want to report on.
 ## Deployment
 
 ```zsh
-# Change region as appropriate.
-sls deploy --region ap-southeast-2
+make deploy
 ```
 
 ### Required Environment Variables
